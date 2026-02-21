@@ -1,0 +1,141 @@
+/* ================= GENERAL ================= */
+body {
+    font-family: Arial, sans-serif;
+    margin: 0;
+    background: #f4f4f4;
+}
+
+h2, h3 {
+    margin: 10px 0;
+}
+
+/* ================= SIDEBAR ================= */
+.sidebar {
+    width: 220px;
+    background: #2c3e50;
+    color: #fff;
+    height: 100vh;
+    position: fixed;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+.sidebar h3 {
+    font-size: 16px;
+    margin-bottom: 15px;
+}
+
+.sidebar a {
+    display: block;
+    color: #ecf0f1;
+    padding: 10px;
+    text-decoration: none;
+    border-radius: 5px;
+    margin: 5px 0;
+    transition: background 0.3s;
+}
+
+.sidebar a:hover {
+    background: #34495e;
+}
+
+/* ================= MAIN CONTENT ================= */
+.main {
+    margin-left: 240px;
+    padding: 20px;
+    box-sizing: border-box;
+}
+
+input, select, button {
+    padding: 8px 10px;
+    margin: 5px;
+    border: 1px solid #ccc;
+    border-radius: 5px;
+    font-size: 14px;
+}
+
+button {
+    background: #27ae60;
+    color: #fff;
+    border: none;
+    cursor: pointer;
+    transition: background 0.3s;
+}
+
+button:hover {
+    background: #2ecc71;
+}
+
+button.delete {
+    background: #e74c3c;
+}
+
+button.delete:hover {
+    background: #c0392b;
+}
+
+/* ================= TABLE ================= */
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    background: #fff;
+}
+
+th, td {
+    border: 1px solid #ddd;
+    padding: 10px;
+    text-align: center;
+}
+
+th {
+    background: #2c3e50;
+    color: white;
+}
+
+tr:nth-child(even) {
+    background: #f9f9f9;
+}
+
+/* ================= RESPONSIVE ================= */
+@media screen and (max-width: 768px) {
+    .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+        padding: 10px;
+    }
+
+    .main {
+        margin-left: 0;
+        padding: 10px;
+    }
+
+    table, th, td {
+        font-size: 12px;
+    }
+
+    input, select, button {
+        width: 100%;
+        box-sizing: border-box;
+    }
+}
+
+/* ================= PRINT STYLING ================= */
+@media print {
+    body * {
+        visibility: hidden;
+    }
+    .main, .main * {
+        visibility: visible;
+    }
+    .main {
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+    }
+    button, input, select {
+        display: none;
+    }
+}

@@ -1,0 +1,61 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Gold POS Dashboard</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<body>
+
+<div class="sidebar">
+    <h3>Gold POS</h3>
+    <h3>Total Pure Gold: <span id="totalPure">0</span> g</h3>
+    <h3>Total Sales: <span id="total">0</span> KES</h3>
+    <a href="#" onclick="printDashboard()">Print Dashboard</a>
+    <a href="#" onclick="exportExcel()">Export Excel</a>
+</div>
+
+<div class="main">
+    <h2>Gold Entry</h2>
+
+    <input id="name" placeholder="Customer Name">
+    <input id="phone" placeholder="Phone Number">
+    <input id="grams" placeholder="Gold Weight (grams)">
+    <input id="percent" placeholder="Gold Percentage (%)">
+    <input id="rate" placeholder="Gold Rate (KES per gram)">
+    <select id="branch">
+        <option>Main</option>
+        <option>Branch 1</option>
+        <option>Branch 2</option>
+    </select>
+
+    <button onclick="addItem()">Add</button>
+    
+    <button onclick="openPrintView('daily')">Daily Report</button>
+    <button onclick="openPrintView('monthly')">Monthly Report</button>
+    <button onclick="openPrintView()">Full Report</button>
+
+    <h3>Total Sales: <span id="total">0</span> KES</h3>
+
+    <table id="table">
+        <tr>
+            <th>Name</th>
+            <th>Phone</th>
+            <th>Grams</th>
+            <th>%</th>
+            <th>Rate</th>
+            <th>Pure Gold</th>
+            <th>Total</th>
+            <th>Actions</th>
+        </tr>
+    </table>
+</div>
+
+
+<script src="{{ url_for('static', filename='js/script.js') }}"></script>
+</body>
+</html>
+
+
+
+
+ 
