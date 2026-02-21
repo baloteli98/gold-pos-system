@@ -2,19 +2,18 @@ from flask import Flask, request, jsonify, send_file, render_template
 from flask_cors import CORS
 import sqlite3
 import pandas as pd
-from datetime import datetime
 import os
 
 app = Flask(__name__)
 CORS(app)
 
-DB_FILE = "gold_pos.db"
+# Use cloud-safe path for SQLite
+DB_FILE = os.environ.get("DB_FILE", "/tmp/gold_pos.db")
 
 # ================= DATABASE SETUP =================
 def init_db():
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
-    # Sales table
     c.execute("""
         CREATE TABLE IF NOT EXISTS sales (
             id INTEGER PRIMARY KEY AUTOINCREMENT,
@@ -36,11 +35,11 @@ init_db()
 
 # ================= ROUTES =================
 
-# Serve dashboard page
+# Dashboard
 @app.route("/")
 @app.route("/dashboard")
 def dashboard():
-    return render_template("dashboard.html")  # Flask looks inside templates/ folder
+    return render_template("dashboard.html")
 
 # Add entry
 @app.route("/add", methods=["POST"])
@@ -59,7 +58,7 @@ def add_entry():
     conn.close()
     return jsonify({"status": "success"}), 201
 
-# Get all entries
+# Get entries
 @app.route("/get", methods=["GET"])
 def get_entries():
     branch = request.args.get("branch")
@@ -99,29 +98,28 @@ def export_excel():
     conn = sqlite3.connect(DB_FILE)
     df = pd.read_sql_query("SELECT * FROM sales", conn)
     conn.close()
-    excel_file = "gold_sales.xlsx"
+    excel_file = "/tmp/gold_sales.xlsx"  # cloud-safe path
     df.to_excel(excel_file, index=False)
     return send_file(excel_file, as_attachment=True)
 
-# Reports
+# Reports (daily, monthly, all)
 @app.route("/report/<string:period>", methods=["GET"])
 def report(period):
     branch = request.args.get("branch")
     conn = sqlite3.connect(DB_FILE)
     c = conn.cursor()
 
-    # Base query
     query = "SELECT id, name, phone, branch, grams, percent, pure, rate, total, timestamp FROM sales"
     params = []
 
-    # Filter by branch if provided
+    # Filter branch
     if branch:
         query += " WHERE branch=?"
         params.append(branch)
 
-    # Filter by period
+    # Filter period
     if period == "daily":
-        if params:  # branch already in WHERE
+        if params:
             query += " AND date(timestamp)=date('now')"
         else:
             query += " WHERE date(timestamp)=date('now')"
@@ -139,13 +137,12 @@ def report(period):
     conn.close()
     return jsonify(rows)
 
-# Serve static files (JS/CSS)
+# Serve static files
 @app.route("/static/<path:filename>")
 def static_files(filename):
     return send_file(os.path.join("static", filename))
 
 # ================= RUN SERVER =================
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))  # Use environment variable PORT or default 5000
-    print(f"Starting Gold POS server on http://0.0.0.0:{port}")
-    app.run(host="0.0.0.0", port=int(os.environ.get("PORT", 5000)))
+    port = int(os.environ.get("PORT", 5000))
+    app.run(host="0.0.0.0", port=port)
